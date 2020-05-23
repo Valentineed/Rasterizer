@@ -1,0 +1,81 @@
+#include "pch.h"
+#include "Entity.h"
+
+namespace Rasterizer
+{
+	Entity::Entity(Mesh* mesh) :
+		m_mesh(mesh)
+	{
+	}
+/*
+	Entity::Entity(Mesh* mesh, Mat4 transformation) :
+		m_mesh(mesh),
+		m_transformation(transformation)
+	{
+	}
+*/
+	Entity::Entity(Mesh* mesh, Vec3 position, Vec3 rotation, Vec3 scale) :
+		m_mesh(mesh),
+		m_position(position),
+		m_rotation(rotation),
+		m_scale(scale)
+	{
+	}
+
+	Mat4 Entity::GetTransformation() const
+	{
+		return Mat4::CreateTransformMatrix(m_position, m_rotation, m_scale);
+	}
+/*
+	void Entity::SetTransformation(Mat4 matrix)
+	{
+		m_transformation = matrix;
+	}
+
+	void Entity::ApplyTransformation(Mat4 matrix)
+	{
+		m_transformation *= matrix;
+	}
+*/
+	void Entity::ResetTransformation()
+	{
+		m_position = {};
+		m_scale = {};
+		m_rotation = {};
+	}
+
+	void Entity::Move(Vec3 movement)
+	{
+		m_position += movement;
+	}
+
+	void Entity::Scale(Vec3 scale)
+	{
+		m_scale += scale;
+	}
+
+	void Entity::Rotate(Vec3 rotation)
+	{
+		m_rotation += rotation;
+	}
+
+	std::vector<Vec3> const& Entity::GetNormalBuffer() const
+	{
+		return m_mesh->GetNormalBuffer();
+	}
+
+	std::vector<Vec3> const& Entity::GetCoordinateBuffer() const
+	{
+		return m_mesh->GetCoordinateBuffer();
+	}
+
+	std::vector<Triangle>::const_iterator Entity::begin() const
+	{
+		return m_mesh->GetTriangleBuffer().begin();
+	}
+
+	std::vector<Triangle>::const_iterator Entity::end() const
+	{
+		return m_mesh->GetTriangleBuffer().end();
+	}
+}
